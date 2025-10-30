@@ -10,7 +10,7 @@ namespace MirraGames.SDK.Playgama {
         public override string IconName { get; } = "Playgama";
         public override bool ReadOnly { get; } = false;
 
-        public override string AchievementsProviderName { get; } = "FallbackAchievements";
+        public override string AchievementsProviderName { get; } = nameof(PlaygamaAchievements);
         public override string AdsProviderName { get; } = "FallbackAds";
         public override string EventsReporterProviderName { get; } = "FallbackEventsReporter";
         public override string GameplayReporterProviderName { get; } = "FallbackGameplayReporter";

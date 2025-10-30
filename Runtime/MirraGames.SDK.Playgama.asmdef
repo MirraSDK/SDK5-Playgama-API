@@ -2,7 +2,8 @@
     "name": "MirraGames.SDK.Playgama",
     "rootNamespace": "MirraGames.SDK.Playgama",
     "references": [
-        "MirraGames.SDK.Common"
+        "MirraGames.SDK.Common",
+        "PlaygamaBridge"
     ],
     "includePlatforms": [
         "Editor",
