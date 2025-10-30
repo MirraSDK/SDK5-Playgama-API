@@ -11,15 +11,15 @@ namespace MirraGames.SDK.Playgama {
         public override bool ReadOnly { get; } = false;
 
         public override string AchievementsProviderName { get; } = nameof(PlaygamaAchievements);
-        public override string AdsProviderName { get; } = "FallbackAds";
+        public override string AdsProviderName { get; } = nameof(PlaygamaAds);
         public override string EventsReporterProviderName { get; } = "FallbackEventsReporter";
-        public override string GameplayReporterProviderName { get; } = "FallbackGameplayReporter";
+        public override string GameplayReporterProviderName { get; } = nameof(PlaygamaGameplayReporter);
         public override string AddressablesProviderName { get; } = "UnityEngineAddressables";
         public override string AssetBundlesProviderName { get; } = "UnityEngineAssetBundles";
         public override string StreamingAssetsProviderName { get; } = "UnityEngineStreamingAssets";
-        public override string AudioProviderName { get; } = "UnityEngineAudio";
+        public override string AudioProviderName { get; } = nameof(PlaygamaAudio);
         public override string BootstrapProviderName { get; } = "FallbackBootstrap";
-        public override string DataProviderName { get; } = "FallbackData";
+        public override string DataProviderName { get; } = nameof(PlaygamaData);
         public override string DeviceBrowserProviderName { get; } = "FallbackDeviceBrowser";
         public override string DeviceCursorProviderName { get; } = "UnityEngineDeviceCursor";
         public override string DeviceInfoProviderName { get; } = "FallbackDeviceInfo";

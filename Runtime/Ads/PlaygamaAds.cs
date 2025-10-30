@@ -4,7 +4,7 @@ using Playgama.Modules.Advertisement;
 using System;
 using Logger = MirraGames.SDK.Common.Logger;
 
-namespace MirraGames.SDK.PlaygamaBridgeProvider {
+namespace MirraGames.SDK.Playgama {
 
     [Provider(typeof(IAds))]
     public class PlaygamaAds : CommonAds {
