@@ -20,10 +20,10 @@ namespace MirraGames.SDK.Playgama {
         public override string AudioProviderName { get; } = nameof(PlaygamaAudio);
         public override string BootstrapProviderName { get; } = "FallbackBootstrap";
         public override string DataProviderName { get; } = nameof(PlaygamaData);
-        public override string DeviceBrowserProviderName { get; } = "FallbackDeviceBrowser";
+        public override string DeviceBrowserProviderName { get; } = "UnityEngineDeviceBrowser";
         public override string DeviceCursorProviderName { get; } = "UnityEngineDeviceCursor";
-        public override string DeviceInfoProviderName { get; } = "FallbackDeviceInfo";
-        public override string FlagsProviderName { get; } = "FallbackFlags";
+        public override string DeviceInfoProviderName { get; } = nameof(PlaygamaDeviceInfo);
+        public override string FlagsProviderName { get; } = nameof(PlaygamaFlags);
         public override string LanguageInfoProviderName { get; } = "FallbackLanguageInfo";
         public override string PauseProviderName { get; } = "FallbackPause";
         public override string PaymentsProviderName { get; } = "FallbackPayments";

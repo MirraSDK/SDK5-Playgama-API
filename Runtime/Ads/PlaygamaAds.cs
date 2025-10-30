@@ -13,6 +13,7 @@ namespace MirraGames.SDK.Playgama {
             Bridge.advertisement.bannerStateChanged += OnBannerStateChanged;
             Bridge.advertisement.interstitialStateChanged += OnInterstitialStateChanged;
             Bridge.advertisement.rewardedStateChanged += OnRewardedStateChanged;
+            SetInitialized();
         }
 
         private void OnBannerStateChanged(BannerState state) {

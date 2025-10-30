@@ -8,6 +8,10 @@ namespace MirraGames.SDK.Playgama {
     [Provider(typeof(IGameplayReporter))]
     public class PlaygamaGameplayReporter : CommonGameplayReporter {
 
+        public PlaygamaGameplayReporter() {
+            SetInitialized();
+        }
+
         protected override void GameIsReadyImpl() {
             Bridge.platform.SendMessage(PlatformMessage.GameReady);
         }

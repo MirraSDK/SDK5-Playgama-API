@@ -3,13 +3,16 @@ using Playgama;
 using Playgama.Modules.Platform;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Logger = MirraGames.SDK.Common.Logger;
 
 namespace MirraGames.SDK.Playgama {
 
     [Provider(typeof(IAchievements))]
     public class PlaygamaAchievements : CommonAchievements {
+
+        public PlaygamaAchievements() {
+            SetInitialized();
+        }
 
         protected override void GetLeaderboardImpl(string boardId, Action<Leaderboard> onLeaderboard) {
             Bridge.leaderboards.GetEntries(boardId, (isSuccess, dictionary) => {
