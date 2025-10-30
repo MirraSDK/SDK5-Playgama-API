@@ -24,12 +24,12 @@ namespace MirraGames.SDK.Playgama {
         public override string DeviceCursorProviderName { get; } = "UnityEngineDeviceCursor";
         public override string DeviceInfoProviderName { get; } = nameof(PlaygamaDeviceInfo);
         public override string FlagsProviderName { get; } = nameof(PlaygamaFlags);
-        public override string LanguageInfoProviderName { get; } = "FallbackLanguageInfo";
-        public override string PauseProviderName { get; } = "FallbackPause";
-        public override string PaymentsProviderName { get; } = "FallbackPayments";
-        public override string PlatformInfoProviderName { get; } = "FallbackPlatformInfo";
-        public override string PlatformInteractionsProviderName { get; } = "FallbackPlatformInteractions";
-        public override string PlayerAccountProviderName { get; } = "FallbackPlayerAccount";
+        public override string LanguageInfoProviderName { get; } = nameof(PlaygamaLanguageInfo);
+        public override string PauseProviderName { get; } = nameof(PlaygamaPause);
+        public override string PaymentsProviderName { get; } = nameof(PlaygamaPayments);
+        public override string PlatformInfoProviderName { get; } = nameof(PlaygamaPlatformInfo);
+        public override string PlatformInteractionsProviderName { get; } = nameof(PlaygamaPlatformInteractions);
+        public override string PlayerAccountProviderName { get; } = nameof(PlaygamaPlayerAccount);
         public override string DateTimeProviderName { get; } = "SystemDateTime";
         public override string TimeScaleProviderName { get; } = "UnityEngineTimeScale";
 
