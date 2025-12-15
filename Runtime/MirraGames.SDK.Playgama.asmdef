@@ -4,6 +4,7 @@
     "references": [
         "MirraGames.SDK.Common",
         "PlaygamaBridge"
+        "Playgama.Bridge"
     ],
     "includePlatforms": [
         "Editor",
