@@ -113,7 +113,7 @@ namespace MirraGames.SDK.Playgama {
         public override bool IsInterstitialVisible { get; protected set; } = false;
         public override bool IsInterstitialAvailable => Bridge.advertisement.isInterstitialSupported;
 
-        protected override void InvokeInterstitialImpl(Action onOpen = null, Action<bool> onClose = null) {
+        protected override void InvokeInterstitialImpl(InterstitialParameters parameters, Action onOpen, Action<bool> onClose) {
             onInterstitialOpen = onOpen;
             onInterstitialClose = onClose;
             Bridge.advertisement.ShowInterstitial();
@@ -123,7 +123,7 @@ namespace MirraGames.SDK.Playgama {
         public override bool IsRewardedVisible { get; protected set; } = false;
         public override bool IsRewardedAvailable => Bridge.advertisement.isRewardedSupported;
 
-        protected override void InvokeRewardedImpl(Action onOpen = null, Action<bool> onClose = null, string rewardTag = null) {
+        protected override void InvokeRewardedImpl(RewardedParameters parameters, Action onOpen, Action<bool> onClose) {
             onRewardedOpen = onOpen;
             onRewardedClose = onClose;
             Bridge.advertisement.ShowRewarded();
