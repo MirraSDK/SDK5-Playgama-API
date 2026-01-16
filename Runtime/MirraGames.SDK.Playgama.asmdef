@@ -3,7 +3,7 @@
     "rootNamespace": "MirraGames.SDK.Playgama",
     "references": [
         "MirraGames.SDK.Common",
-        "PlaygamaBridge"
+        "PlaygamaBridge",
         "Playgama.Bridge"
     ],
     "includePlatforms": [
