@@ -1,6 +1,5 @@
 using MirraGames.SDK.Common;
 using Playgama;
-using Playgama.Modules.Game;
 
 namespace MirraGames.SDK.Playgama {
 
@@ -11,14 +10,13 @@ namespace MirraGames.SDK.Playgama {
             dispatcher.OnApplicationPause += OnApplicationPause;
             dispatcher.OnApplicationFocus += OnApplicationFocus;
             dispatcher.Start += () => {
-                Bridge.game.visibilityStateChanged += OnVisibilityStateChanged;
-                OnVisibilityStateChanged(Bridge.game.visibilityState);
+                Bridge.platform.pauseStateChanged += OnPauseStateChanged;
             };
         }
-
-        private void OnVisibilityStateChanged(VisibilityState state) {
-            Logger.CreateText(this, nameof(OnVisibilityStateChanged), state.ToString());
-            Register(nameof(OnVisibilityStateChanged), state == VisibilityState.Hidden);
+        
+        private void OnPauseStateChanged(bool state) {
+            Logger.CreateText(this, nameof(OnPauseStateChanged), state);
+            Register(nameof(OnPauseStateChanged), state);
         }
 
         public void OnApplicationFocus(bool focusStatus) {
