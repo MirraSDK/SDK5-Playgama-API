@@ -3,10 +3,12 @@ using Playgama;
 using System;
 using System.Collections.Generic;
 
-namespace MirraGames.SDK.Playgama {
+namespace MirraGames.SDK.Playgama
+{
 
     [Provider(typeof(IPayments))]
-    public class PlaygamaPayments : CommonPayments {
+    public class PlaygamaPayments : CommonPayments
+    {
 
         private ProductData[] products = Array.Empty<ProductData>();
         private string[] purchases = Array.Empty<string>();
@@ -14,25 +16,31 @@ namespace MirraGames.SDK.Playgama {
         private bool isProductsReady = false;
         private bool isPurchasesReady = false;
 
-        public PlaygamaPayments(IData data, IEventDispatcher dispatcher) : base(data) {
-            if (IsPaymentsAvailable == false) {
+        public PlaygamaPayments(IData data, IEventDispatcher dispatcher) : base(data)
+        {
+            if (IsPaymentsAvailable == false)
+            {
                 SetInitialized();
                 return;
             }
             dispatcher.Start += OnStart;
         }
 
-        private void OnStart() {
-            Bridge.payments.GetCatalog((isSuccess, catalog) => {
+        private void OnStart()
+        {
+            Bridge.payments.GetCatalog((isSuccess, catalog) =>
+            {
                 isProductsReady = true;
-                if (isSuccess == true) {
+                if (isSuccess)
+                {
                     List<ProductData> products = new();
-                    foreach (Dictionary<string, string> item in catalog) {
+                    foreach (Dictionary<string, string> item in catalog)
+                    {
                         string productTag = item["id"];
                         string priceValue = item["priceValue"];
                         string priceCurrency = item["priceCurrencyCode"];
                         Logger.CreateText(this, $"Product ({productTag}, {priceValue}, {priceCurrency})");
-                        float priceFloat = float.Parse(priceValue);
+                        float priceFloat = float.Parse(priceValue, System.Globalization.CultureInfo.InvariantCulture);
                         ProductData product = new(productTag, priceFloat, priceCurrency);
                         products.Add(product);
                     }
@@ -40,11 +48,14 @@ namespace MirraGames.SDK.Playgama {
                 }
                 CheckForReady();
             });
-            Bridge.payments.GetPurchases((isSuccess, inventory) => {
+            Bridge.payments.GetPurchases((isSuccess, inventory) =>
+            {
                 isPurchasesReady = true;
-                if (isSuccess == true) {
+                if (isSuccess)
+                {
                     List<string> purchases = new();
-                    foreach (Dictionary<string, string> purchase in inventory) {
+                    foreach (Dictionary<string, string> purchase in inventory)
+                    {
                         purchases.Add(purchase["id"]);
                     }
                     this.purchases = purchases.ToArray();
@@ -53,38 +64,50 @@ namespace MirraGames.SDK.Playgama {
             });
         }
 
-        private void CheckForReady() {
-            if (isProductsReady && isPurchasesReady) {
+        private void CheckForReady()
+        {
+            if (isProductsReady && isPurchasesReady)
+            {
                 SetInitialized();
             }
         }
 
         public override bool IsPaymentsAvailable => Bridge.payments.isSupported;
 
-        protected override ProductData GetProductDataImpl(string productTag) {
+        protected override ProductData GetProductDataImpl(string productTag)
+        {
             return Array.Find(products, p => p.Tag == productTag);
         }
 
-        protected override bool IsAlreadyPurchasedImpl(string productTag) {
+        protected override bool IsAlreadyPurchasedImpl(string productTag)
+        {
             return Array.Exists(purchases, p => p == productTag);
         }
 
-        protected override void PurchaseImpl(string productTag, Action onSuccess, Action onError = null) {
-            Bridge.payments.Purchase(productTag, (isSuccess, purchase) => {
-                if (isSuccess) {
+        protected override void PurchaseImpl(string productTag, Action onSuccess, Action onError = null)
+        {
+            Bridge.payments.Purchase(productTag, (isSuccess, purchase) =>
+            {
+                if (isSuccess)
+                {
                     onSuccess?.Invoke();
                 }
-                else {
+                else
+                {
                     onError?.Invoke();
                 }
             });
         }
 
-        protected override void RestorePurchasesImpl(Action<IRestoreData> onRestoreData) {
-            Bridge.payments.GetPurchases((isSuccess, inventory) => {
-                if (isSuccess == true) {
+        protected override void RestorePurchasesImpl(Action<IRestoreData> onRestoreData)
+        {
+            Bridge.payments.GetPurchases((isSuccess, inventory) =>
+            {
+                if (isSuccess == true)
+                {
                     List<string> purchases = new();
-                    foreach (Dictionary<string, string> purchase in inventory) {
+                    foreach (Dictionary<string, string> purchase in inventory)
+                    {
                         purchases.Add(purchase["id"]);
                     }
                     this.purchases = purchases.ToArray();
