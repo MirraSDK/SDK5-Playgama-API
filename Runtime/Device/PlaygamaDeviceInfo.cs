@@ -1,13 +1,18 @@
 using MirraGames.SDK.Common;
 using Playgama;
+using BridgeDeviceType = Playgama.Modules.Device.DeviceType;
 
 namespace MirraGames.SDK.Playgama {
 
     [Provider(typeof(IDeviceInfo))]
     public class PlaygamaDeviceInfo : CommonDeviceInfo {
 
+        /// <summary>
+        /// Tablets get the touch layout too.
+        /// </summary>
         protected override bool GetIsMobileImpl() {
-            return Bridge.device.type == global::Playgama.Modules.Device.DeviceType.Mobile;
+            BridgeDeviceType type = Bridge.device.type;
+            return type == BridgeDeviceType.Mobile || type == BridgeDeviceType.Tablet;
         }
 
         protected override SystemType GetSystemTypeImpl() {
