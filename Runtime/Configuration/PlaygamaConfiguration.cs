@@ -1,4 +1,5 @@
 using MirraGames.SDK.Common;
+using System;
 
 namespace MirraGames.SDK.Playgama {
 
@@ -6,9 +7,13 @@ namespace MirraGames.SDK.Playgama {
     public class PlaygamaConfiguration : Configuration {
 
         public override string Name { get; } = nameof(PlaygamaConfiguration);
-        public override string Description { get; } = "Using PlaygamaBridge SDK API";
+        public override string Description { get; } = "Playgama Bridge v2 for Unity";
         public override string IconName { get; } = "Playgama";
         public override bool ReadOnly { get; } = false;
+
+        public override Type[] PropertyGroups { get; } = new Type[] {
+            typeof(Logger_PropertyGroup),
+        };
 
         public override string AchievementsProviderName { get; } = nameof(PlaygamaAchievements);
         public override string AdsProviderName { get; } = nameof(PlaygamaAds);

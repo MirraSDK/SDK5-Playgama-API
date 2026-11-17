@@ -1,58 +1,30 @@
 using MirraGames.SDK.Common;
+using MirraGames.SDK.UnityEngine;
 using Playgama;
-using UnityEngine;
+using System;
+using Logger = MirraGames.SDK.Common.Logger;
 
 namespace MirraGames.SDK.Playgama {
 
+    /// <summary>
+    /// Unity audio muted while the platform turns sound off, starting muted when it is already off (Playgama rule 3.3.4).
+    /// </summary>
     [Provider(typeof(IAudio))]
-    public class PlaygamaAudio : CommonAudio, IEventListener<PauseChangeEvent> {
+    public class PlaygamaAudio : UnityEngineAudio {
 
-        private bool audioEnabled = true;
-        private float desiredVolume = 1f;
-        private bool desiredPause = false;
-
-        public PlaygamaAudio(IEventAggregator eventAggregator, IEventDispatcher dispatcher) : base(eventAggregator) {
-            eventAggregator.Subscribe(this);
-            dispatcher.Start += () => {
+        public PlaygamaAudio(UnityEngineAudio_Configuration config, IEventAggregator eventAggregator) : base(config, eventAggregator) {
+            try {
+                SetMuted(!Bridge.platform.isAudioEnabled);
                 Bridge.platform.audioStateChanged += OnAudioStateChanged;
-            };
-            desiredVolume = AudioListener.volume;
-            desiredPause = AudioListener.pause;
-            UpdateAudioState();
+            }
+            catch (Exception exception) {
+                Logger.CreateError(this, exception);
+            }
         }
 
         private void OnAudioStateChanged(bool isEnabled) {
-            audioEnabled = isEnabled;
-            UpdateAudioState();
-        }
-
-        private void UpdateAudioState() {
-            if (audioEnabled) {
-                AudioListener.volume = desiredVolume;
-                AudioListener.pause = desiredPause;
-            }
-            else {
-                AudioListener.volume = 0.0f;
-                AudioListener.pause = true;
-            }
-        }
-
-        protected override float GetVolumeImpl() {
-            return audioEnabled ? desiredVolume : 0.0f;
-        }
-
-        protected override void SetVolumeImpl(float volume) {
-            desiredVolume = Mathf.Clamp01(volume);
-            UpdateAudioState();
-        }
-
-        protected override bool GetPauseImpl() {
-            return audioEnabled ? desiredPause : true;
-        }
-
-        protected override void SetPauseImpl(bool pause) {
-            desiredPause = pause;
-            UpdateAudioState();
+            Logger.CreateText(this, nameof(OnAudioStateChanged), isEnabled);
+            SetMuted(!isEnabled);
         }
 
     }

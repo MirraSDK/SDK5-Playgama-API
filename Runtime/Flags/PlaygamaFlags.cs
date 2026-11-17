@@ -2,6 +2,8 @@ using MirraGames.SDK.Common;
 using Playgama;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using Logger = MirraGames.SDK.Common.Logger;
 
 namespace MirraGames.SDK.Playgama {
 
@@ -28,40 +30,47 @@ namespace MirraGames.SDK.Playgama {
 
         private void OnStart() {
             try {
-                if (Bridge.platform.id != "yandex") {
-                    IsFlagsAvailable = false;
-                    IsFlagsInitialized = true;
-                    waiters.PopInvokeAll();
+                if (Bridge.remoteConfig.isSupported == false) {
+                    Complete(false);
                     return;
                 }
                 Bridge.remoteConfig.Get((isSuccess, config) => {
                     collection.Clear();
-                    foreach (KeyValuePair<string, string> pair in config) {
-                        collection.Add(pair.Key, pair.Value);
+                    if (isSuccess && config != null) {
+                        foreach (KeyValuePair<string, string> pair in config) {
+                            collection[pair.Key] = pair.Value;
+                        }
                     }
-                    IsFlagsAvailable = true;
-                    IsFlagsInitialized = true;
-                    waiters.PopInvokeAll();
+                    else {
+                        Logger.CreateError(this, "Failed to get remote config");
+                    }
+                    Complete(isSuccess && config != null);
                 });
             }
             catch (Exception exception) {
                 Logger.CreateError(this, exception);
-                IsFlagsAvailable = false;
-                IsFlagsInitialized = true;
-                waiters.PopInvokeAll();
+                Complete(false);
             }
         }
 
+        private void Complete(bool isAvailable) {
+            IsFlagsAvailable = isAvailable;
+            IsFlagsInitialized = true;
+            waiters.PopInvokeAll();
+        }
+
         public bool GetBool(string key, bool defaultValue = false) {
-            return collection.TryGetValue(key, out string value) ? bool.Parse(value) : defaultValue;
+            return collection.TryGetValue(key, out string value) && bool.TryParse(value, out bool result) ? result : defaultValue;
         }
 
         public float GetFloat(string key, float defaultValue = 0) {
-            return collection.TryGetValue(key, out string value) ? float.Parse(value) : defaultValue;
+            return collection.TryGetValue(key, out string value)
+                && float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float result) ? result : defaultValue;
         }
 
         public int GetInt(string key, int defaultValue = 0) {
-            return collection.TryGetValue(key, out string value) ? int.Parse(value) : defaultValue;
+            return collection.TryGetValue(key, out string value)
+                && int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result) ? result : defaultValue;
         }
 
         public string GetString(string key, string defaultValue = "") {

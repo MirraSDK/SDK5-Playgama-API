@@ -1,51 +1,39 @@
 using MirraGames.SDK.Common;
 using Playgama;
-using System.Collections.Generic;
+using Logger = MirraGames.SDK.Common.Logger;
 
 namespace MirraGames.SDK.Playgama {
 
     [Provider(typeof(IPlatformInteractions))]
     public class PlaygamaPlatformInteractions : CommonPlatformInteractions {
 
-        protected override void RateGameImpl() {
-            if (Bridge.social.isRateSupported) {
-                Bridge.social.Rate((isSuccess) => {
-                    if (isSuccess) {
-                        Logger.CreateText("rate game success");
-                    }
-                    else {
-                        Logger.CreateText("rate game error");
-                    }
-                });
-            }
+        private readonly string shareConfigId;
+
+        public PlaygamaPlatformInteractions(PlaygamaPlatformInteractions_Configuration configuration) {
+            shareConfigId = string.IsNullOrEmpty(configuration?.ShareConfigId) ? "default" : configuration.ShareConfigId;
         }
 
-        protected override void ShareGameImpl(string messageText) {
-            Dictionary<string, object> options = new();
-            switch (Bridge.platform.id) {
-                case "vk": {
-                    options.Add("link", "");
-                    break;
-                }
-                case "facebook": {
-                    options.Add("image", "");
-                    options.Add("text", "");
-                    break;
-                }
-                case "msn": {
-                    options.Add("title", "");
-                    options.Add("image", "");
-                    options.Add("text", "");
-                    break;
-                }
+        protected override void RateGameImpl() {
+            if (Bridge.social.isRateSupported == false) {
+                Logger.NotAvailableWarning(this, nameof(RateGameImpl));
+                return;
             }
-            Bridge.social.Share(options, (isSuccess) => {
-                if (isSuccess) {
-                    Logger.CreateText("share game success");
-                }
-                else {
-                    Logger.CreateText("share game error");
-                }
+            Bridge.social.Rate((isSuccess) => {
+                Logger.CreateText(this, nameof(RateGameImpl), isSuccess);
+            });
+        }
+
+        /// <summary>
+        /// Bridge v2 shares a preset from the 'social.shares' list of playgama-bridge-config.json,
+        /// so the MirraSDK message text is not sent; the configured preset id is used instead.
+        /// </summary>
+        protected override void ShareGameImpl(string messageText) {
+            if (Bridge.social.isShareSupported == false) {
+                Logger.NotAvailableWarning(this, nameof(ShareGameImpl));
+                return;
+            }
+            Bridge.social.Share(shareConfigId, (isSuccess) => {
+                Logger.CreateText(this, nameof(ShareGameImpl), shareConfigId, isSuccess);
             });
         }
 
